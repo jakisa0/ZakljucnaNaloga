@@ -1,0 +1,160 @@
+<!-- templates/login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CustomCloset Login</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+        .form-container {
+            display: none;
+        }
+        #login-container {
+            display: block;
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>CustomCloset</h1>
+    <div id="error-message" style="color: red; display: none;"></div>
+    
+    <div id="login-container" class="form-container">
+        <h2>Login</h2>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+        </div>
+        
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+        </div>
+        
+        <div>
+            <button onclick="loginOrRegister()">Login</button>
+        </div>
+    </div>
+    
+    <div id="register-container" class="form-container">
+        <h2>Register</h2>
+        <div>
+            <label for="new-username">Username:</label>
+            <input type="text" id="new-username" required>
+        </div>
+        
+        <div>
+            <label for="new-password">Password:</label>
+            <input type="password" id="new-password" required>
+        </div>
+        
+        <div>
+            <button onclick="register()">Register</button>
+        </div>
+    </div>
+    
+    <button id="toggle-form">Register</button>
+    
+    <script>
+        function loginOrRegister() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            
+            if (username === '' || password === '') {
+                errorMessage.textContent = 'Uporabniško ime in geslo sta obvezna!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            errorMessage.style.display = 'none';
+            $.ajax({
+                url: '/login',
+                type: 'POST',
+                data: { username, password },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = '/';
+                    } else {
+                        errorMessage.textContent = response.error;
+                        errorMessage.style.display = 'block';
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Podrobnosti napake:', xhr.responseText);
+                    errorMessage.textContent = 'Prišlo je do napake. Poskusite znova.';
+                    errorMessage.style.display = 'block';
+                }
+            });
+        }
+        
+        function register() {
+            const username = document.getElementById('new-username').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            
+            if (username === '' || password === '') {
+                errorMessage.textContent = 'Uporabniško ime in geslo sta obvezna!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+            
+            errorMessage.style.display = 'none';
+            $.ajax({
+                url: '/register',
+                type: 'POST',
+                data: { username, password },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = '/';
+                    } else {
+                        errorMessage.textContent = response.error;
+                        errorMessage.style.display = 'block';
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Podrobnosti napake:', xhr.responseText);
+                    errorMessage.textContent = 'Prišlo je do napake. Poskusite znova.';
+                    errorMessage.style.display = 'block';
+                }
+            });
+        }
+        
+        document.getElementById('toggle-form').addEventListener('click', function() {
+            let loginForm = document.getElementById('login-container');
+            let registerForm = document.getElementById('register-container');
+            let toggleButton = document.getElementById('toggle-form');
+            
+            if (loginForm.style.display === 'block') {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+                toggleButton.textContent = 'Back to Login';
+            } else {
+                loginForm.style.display = 'block';
+                registerForm.style.display = 'none';
+                toggleButton.textContent = 'Register';
+            }
+        });
+    </script>
+</body>
+</html>
