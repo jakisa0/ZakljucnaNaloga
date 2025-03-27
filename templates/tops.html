@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tops Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc;
+            text-align: center;
+            padding: 20px;
+        }
+        .images {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .image-item {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .back-button, .upload-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button:hover, .upload-button:hover {
+            background-color: #0056b3;
+        }
+        .upload-container {
+            margin-top: 30px;
+        }
+        .upload-container input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ category|capitalize }} Gallery</h1>
+
+    <!-- Back to Closet button -->
+    <button class="back-button" onclick="window.location.href='/closet'">Back to Closet</button>
+
+    <!-- Dodajanje gumba za nalaganje slike -->
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput" required>
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <div id="uploadedImageContainer"></div>
+
+    <script>
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let formData = new FormData();
+            formData.append("file", document.getElementById("fileInput").files[0]);
+
+            // Zamenjaj 'tops' z ustrezno kategorijo, ki se uporablja v tvoji aplikaciji
+            fetch("/upload/tops", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let imageUrl = data.file_path;
+                    let imageElement = document.createElement("img");
+                    imageElement.src = imageUrl;
+                    document.getElementById("uploadedImageContainer").appendChild(imageElement);
+                } else {
+                    alert("Error uploading image: " + data.error);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+
+
+    <!-- Gallery of Images -->
+    <div class="images">
+        {% for image in images %}
+            <div class="image-container">
+                <img src="{{ url_for('uploaded_file', username=session['username'], category=category, filename=image.split('/')[-1]) }}" alt="Slika" />
+            </div>
+        {% endfor %}
+    
+    </div>
+</body>
+</html>
