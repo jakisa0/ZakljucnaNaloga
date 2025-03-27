@@ -6,39 +6,121 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
-            text-align: center;
+            background: linear-gradient(132deg, #ebe6c3 0%, #aca999 100%);
+            margin: 0;
         }
-        .form-container {
-            display: none;
+
+        .container {
+            text-align:center;
+            width: 100%;
         }
+
+        h1 {
+            font-size: 3rem;
+            color: #444;
+            margin-bottom: 20px;
+            margin-right: 40px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
         #login-container {
-            display: block;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
         }
+
+        #login-container:hover {
+            transform: scale(1.03);
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
         input {
-            display: block;
-            margin: 10px auto;
-            padding: 8px;
-            width: 200px;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            transition: border 0.3s ease-in-out;
         }
+
+        input:focus {
+            border-color: #eeecde;
+            outline: none;
+        }
+
         button {
-            margin-top: 10px;
-            padding: 8px 15px;
+            width: 100%;
+            padding: 15px;
+            background-color: #5b594e;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.3rem;
             cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #8c8a7b;
+            transform: translateY(-2px);
+        }
+
+        #error-message {
+            color: red;
+            font-size: 1rem;
+            margin-top: 10px;
+            margin-right: 30px;
+            display: none;
+            background: rgba(255, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #login-container {
+            animation: fadeIn 0.5s ease-out;
         }
     </style>
 </head>
 <body>
-    <h1>CustomCloset</h1>
+    <h1>welcome to<br>CustomCloset</h1>
+    
     <div id="error-message" style="color: red; display: none;"></div>
     
-    <div id="login-container" class="form-container">
-        <h2>Login</h2>
+    <div id="login-container">
+        <h2>Login or Register</h2>
+        <p>If the account does not exist, a new one will be created.</p>
+        
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" required>
@@ -50,111 +132,59 @@
         </div>
         
         <div>
-            <button onclick="loginOrRegister()">Login</button>
+            <button onclick="loginOrRegister()">Login / Register</button>
         </div>
     </div>
-    
-    <div id="register-container" class="form-container">
-        <h2>Register</h2>
-        <div>
-            <label for="new-username">Username:</label>
-            <input type="text" id="new-username" required>
-        </div>
-        
-        <div>
-            <label for="new-password">Password:</label>
-            <input type="password" id="new-password" required>
-        </div>
-        
-        <div>
-            <button onclick="register()">Register</button>
-        </div>
-    </div>
-    
-    <button id="toggle-form">Register</button>
     
     <script>
         function loginOrRegister() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             const errorMessage = document.getElementById('error-message');
-            
             if (username === '' || password === '') {
-                errorMessage.textContent = 'Uporabniško ime in geslo sta obvezna!';
+                errorMessage.textContent = 'Username and password are required!';
                 errorMessage.style.display = 'block';
                 return;
             }
             
             errorMessage.style.display = 'none';
+			
             $.ajax({
                 url: '/login',
                 type: 'POST',
-                data: { username, password },
+                data: {
+                    username: username,
+                    password: password
+                },
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
-                        window.location.href = '/';
+                        window.location.href = '/closet';
                     } else {
                         errorMessage.textContent = response.error;
                         errorMessage.style.display = 'block';
                     }
                 },
-                error: function(xhr) {
-                    console.error('Podrobnosti napake:', xhr.responseText);
-                    errorMessage.textContent = 'Prišlo je do napake. Poskusite znova.';
+                error: function(xhr, status, error) {
+                    console.error('Error details:', xhr.responseText);
+                    errorMessage.textContent = 'An error occurred. Please try again.';
                     errorMessage.style.display = 'block';
                 }
             });
         }
         
-        function register() {
-            const username = document.getElementById('new-username').value.trim();
-            const password = document.getElementById('new-password').value.trim();
-            const errorMessage = document.getElementById('error-message');
-            
-            if (username === '' || password === '') {
-                errorMessage.textContent = 'Uporabniško ime in geslo sta obvezna!';
-                errorMessage.style.display = 'block';
-                return;
-            }
-            
-            errorMessage.style.display = 'none';
-            $.ajax({
-                url: '/register',
-                type: 'POST',
-                data: { username, password },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = '/';
-                    } else {
-                        errorMessage.textContent = response.error;
-                        errorMessage.style.display = 'block';
-                    }
-                },
-                error: function(xhr) {
-                    console.error('Podrobnosti napake:', xhr.responseText);
-                    errorMessage.textContent = 'Prišlo je do napake. Poskusite znova.';
-                    errorMessage.style.display = 'block';
-                }
-            });
-        }
-        
-        document.getElementById('toggle-form').addEventListener('click', function() {
-            let loginForm = document.getElementById('login-container');
-            let registerForm = document.getElementById('register-container');
-            let toggleButton = document.getElementById('toggle-form');
-            
-            if (loginForm.style.display === 'block') {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-                toggleButton.textContent = 'Back to Login';
-            } else {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                toggleButton.textContent = 'Register';
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginOrRegister();
             }
         });
+        
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginOrRegister();
+            }
+        });
+        
     </script>
 </body>
 </html>
