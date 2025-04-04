@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Outfit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc;
+            text-align: center;
+            padding: 20px;
+        }
+        .category {
+            margin-bottom: 20px;
+        }
+        .category label {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .preview img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin: 5px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Your Outfit</h1>
+
+    <!-- Izbira oblačil po kategorijah -->
+    <div class="category">
+        <label for="headwear">Headwear:</label>
+        <select id="headwear" onchange="updateOutfit('headwear')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="tops">Top:</label>
+        <select id="tops" onchange="updateOutfit('tops')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="shirts">Shirt:</label>
+        <select id="shirts" onchange="updateOutfit('shirts')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="sweaters">Sweater:</label>
+        <select id="sweaters" onchange="updateOutfit('sweaters')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="jackets">Jacket:</label>
+        <select id="jackets" onchange="updateOutfit('jackets')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="pants">Pants:</label>
+        <select id="pants" onchange="updateOutfit('pants')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <div class="category">
+        <label for="shoes">Shoes:</label>
+        <select id="shoes" onchange="updateOutfit('shoes')">
+            <option value="">Select</option>
+        </select>
+    </div>
+
+    <!-- Prikaz outfita -->
+    <div class="preview">
+        <h2>Outfit Preview</h2>
+        <img id="headwear-preview" src="" alt="Headwear" style="display:none;">
+        <img id="tops-preview" src="" alt="Top" style="display:none;">
+        <img id="shirts-preview" src="" alt="Shirt" style="display:none;">
+        <img id="sweaters-preview" src="" alt="Sweater" style="display:none;">
+        <img id="jackets-preview" src="" alt="Jacket" style="display:none;">
+        <img id="pants-preview" src="" alt="Pants" style="display:none;">
+        <img id="shoes-preview" src="" alt="Shoes" style="display:none;">
+    </div>
+
+    <a href="/closet" class="back-button">Back to Closet</a>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadCategory("headwear");
+            loadCategory("tops");
+            loadCategory("shirts");
+            loadCategory("sweaters");
+            loadCategory("jackets");
+            loadCategory("pants");
+            loadCategory("shoes");
+        });
+
+        function loadCategory(category) {
+            fetch(`/get_images/${category}`)
+                .then(response => response.json())
+                .then(data => {
+                    let select = document.getElementById(category);
+                    data.images.forEach(image => {
+                        let option = document.createElement("option");
+                        option.value = image;
+                        option.textContent = image.split('/').pop();
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error("Error loading images:", error));
+        }
+
+        function updateOutfit(category) {
+            let selectedImage = document.getElementById(category).value;
+            let previewImage = document.getElementById(category + "-preview");
+
+            if (selectedImage) {
+                previewImage.src = selectedImage;
+                previewImage.style.display = "block";
+            } else {
+                previewImage.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

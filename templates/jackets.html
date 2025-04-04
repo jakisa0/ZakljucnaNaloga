@@ -68,8 +68,7 @@
             let formData = new FormData();
             formData.append("file", document.getElementById("fileInput").files[0]);
 
-            // Zamenjaj 'tops' z ustrezno kategorijo, ki se uporablja v tvoji aplikaciji
-            fetch("/upload/tops", {
+            fetch("/upload/jackets", {
                 method: "POST",
                 body: formData
             })
@@ -95,7 +94,7 @@
     <div class="images">
         {% for image in images %}
             <div class="image-container">
-                <img src="{{ url_for('uploaded_file', username=session['username'], category=category, filename=image.split('/')[-1]) }}" alt="Slika" />
+                <img src="{{ url_for('uploaded_file', username=session['username'], category=category, filename=image.split('/')[-1]) }}" alt="Slika" width="200" height=auto />
             </div>
         {% endfor %}
     

@@ -10,6 +10,39 @@
             background-color: #f5f5dc;
             text-align: center;
             padding: 20px;
+            position: relative;
+        }
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .logout-button:hover {
+            background-color: #cc0000;
+        }
+        .create-outfit-button {
+            display: inline-block;
+            float: left;
+            margin-top: 60px;
+            padding: 10px 20px;
+            background-color: #ceb992;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .create-outfit-button:hover {
+            background-color: #99896c;
         }
         .albums {
             display: flex;
@@ -38,7 +71,10 @@
     </style>
 </head>
 <body>
+    <a href="/home" class="logout-button">Log Out</a>
+    
     <h1>My Closet</h1>
+
     <div class="albums">
         <a href="/closet/tops" class="album">Tops</a>
         <a href="/closet/shirts" class="album">Shirts</a>
@@ -47,5 +83,8 @@
         <a href="/closet/pants" class="album">Pants</a>
         <a href="/closet/shoes" class="album">Shoes</a>         
     </div>
+
+    <!-- Gumb za ustvarjanje outfita -->
+    <a href="/outfitcreation" class="create-outfit-button">CREATE AN OUTFIT</a>
 </body>
 </html>
