@@ -64,7 +64,6 @@ def closet_category(category):
 
     images = images_db.search((User.username == username) & (User.category == category))
     
-    # Popravi poti, da so relativne do `static/uploads/`
     image_urls = [img['file_path'].replace("\\", "/") for img in images]
 
     return render_template(f"{category}.html", category=category, images=image_urls)
@@ -91,7 +90,6 @@ def upload_image(category):
     file_path = os.path.join(user_folder, filename)
     file.save(file_path)
 
-    # Popravi pot, da je pravilna za HTML
     relative_path = file_path.replace("\\", "/")
 
     images_db.insert({'username': username, 'category': category, 'file_path': relative_path})
