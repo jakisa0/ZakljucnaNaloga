@@ -1,3 +1,6 @@
+#git config --global user.name jakisa0
+#git config --global user.name jakakosir5@gmail.com
+
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from tinydb import TinyDB, Query
