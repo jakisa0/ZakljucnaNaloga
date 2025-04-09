@@ -28,10 +28,16 @@
         .logout-button:hover {
             background-color: #cc0000;
         }
-        .create-outfit-button {
-            display: inline-block;
-            float: left;
+
+        .top-buttons {
             margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .top-button {
             padding: 10px 20px;
             background-color: #ceb992;
             color: white;
@@ -41,9 +47,30 @@
             text-decoration: none;
             font-size: 16px;
         }
-        .create-outfit-button:hover {
+
+        .top-button:hover {
             background-color: #99896c;
         }
+
+        .map-button {
+            padding: 10px 20px;
+            background-image: url("/static/dodatneStvari/zemljevid.jpg");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        .map-button:hover {
+            opacity: 0.9;
+        }
+
         .albums {
             display: flex;
             flex-wrap: wrap;
@@ -51,6 +78,7 @@
             gap: 20px;
             margin-top: 30px;
         }
+
         .album {
             background-color: white;
             padding: 15px;
@@ -65,6 +93,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .album:hover {
             transform: scale(1.05);
         }
@@ -72,8 +101,14 @@
 </head>
 <body>
     <a href="/home" class="logout-button">Log Out</a>
-    
+
     <h1>My Closet</h1>
+
+    <div class="top-buttons">
+        <a href="/outfitcreation" class="top-button">CREATE AN OUTFIT</a>
+        <a href="/oglas" class="top-button">OBJAVI OGLAS</a>
+        <a href="/trade" class="map-button">OGLEJ SI ZEMLJEVID</a>
+    </div>
 
     <div class="albums">
         <a href="/closet/tops" class="album">Tops</a>
@@ -83,8 +118,5 @@
         <a href="/closet/pants" class="album">Pants</a>
         <a href="/closet/shoes" class="album">Shoes</a>         
     </div>
-
-    <!-- Gumb za ustvarjanje outfita -->
-    <a href="/outfitcreation" class="create-outfit-button">CREATE AN OUTFIT</a>
 </body>
 </html>

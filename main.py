@@ -1,5 +1,6 @@
 #git config --global user.name jakisa0
 #git config --global user.name jakakosir5@gmail.com
+#pip install tinydb flask
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
@@ -117,6 +118,68 @@ def get_images(category):
     image_urls = [url_for('uploaded_file', username=username, category=category, filename=img['file_path'].split('/')[-1]) for img in images]
 
     return jsonify({'images': image_urls})
+
+
+
+
+#------------------------------------------trade------------------------------------------
+from werkzeug.datastructures import FileStorage
+from tinydb.operations import set
+import uuid
+
+# Nova tabela za oglase
+ads_db = db.table('ads')
+
+@app.route('/oglas', methods=['GET', 'POST'])
+def oglas():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        image = request.files.get('image')
+        size = request.form.get('size')
+        contact = request.form.get('contact')
+        lat = request.form.get('lat')
+        lon = request.form.get('lon')
+        username = session['username']
+
+        if not image or not size or not contact:
+            return jsonify({'success': False, 'error': 'Missing fields'})
+
+        filename = secure_filename(image.filename)
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'ads')
+        os.makedirs(image_path, exist_ok=True)
+        full_path = os.path.join(image_path, filename)
+        image.save(full_path)
+
+        image_url = f"/uploads/ads/{filename}"
+
+        ad_id = str(uuid.uuid4())
+        ads_db.insert({
+            'id': ad_id,
+            'username': username,
+            'image': image_url,
+            'size': size,
+            'contact': contact,
+            'lat': float(lat),
+            'lon': float(lon)
+        })
+
+        return redirect(url_for('trade'))
+
+    return render_template('oglas.html')
+
+@app.route('/trade')
+def trade():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    ads = ads_db.all()
+    return render_template('trade.html', ads=ads)
+
+@app.route('/uploads/ads/<filename>')
+def uploaded_ad_image(filename):
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'ads'), filename)
 
 if __name__ == "__main__":
     if not os.path.exists('templates'):
