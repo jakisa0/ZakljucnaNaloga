@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Moji oglasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5dc;
+            text-align: center;
+            padding: 20px;
+        }
+        .ad-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            padding: 15px;
+            width: 300px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        form {
+            margin-top: 10px;
+        }
+        .remove-btn {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tvoji aktivni oglasi</h1>
+    {% if ads %}
+        {% for ad in ads %}
+            <div class="ad-card">
+                <img src="{{ ad.image }}" alt="Oglas slika">
+                <p>Velikost: {{ ad.size }}</p>
+                <p>Kontakt: {{ ad.contact }}</p>
+                <form method="post">
+                    <input type="hidden" name="remove_id" value="{{ ad.id }}">
+                    <button type="submit" class="remove-btn">Odstrani oglas</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Ni še aktivnih oglasov.</p>
+    {% endif %}
+</body>
+</html>

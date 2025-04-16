@@ -4,8 +4,55 @@
     <title>Objavi oglas</title>
     <meta charset="UTF-8">
     <style>
-        body { font-family: Arial; padding: 20px; background: #f9f9f9; text-align: center; }
-        form { display: inline-block; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 40px;
+            background: #f5f5dc;
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: inline-block;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
     </style>
 </head>
 <body>
@@ -23,7 +70,8 @@
             </select>
         </p>
         <p><input type="text" name="contact" placeholder="Kontakt (e-mail, tel...)" required></p>
-        <p><input type="hidden" name="lat" id="lat"><input type="hidden" name="lon" id="lon"></p>
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lon" id="lon">
         <p><button type="submit">Objavi oglas</button></p>
     </form>
 

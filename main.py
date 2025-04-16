@@ -119,10 +119,7 @@ def get_images(category):
 
     return jsonify({'images': image_urls})
 
-
-
-
-#------------------------------------------trade------------------------------------------
+#------------------------------------------OGLASI------------------------------------------
 from werkzeug.datastructures import FileStorage
 from tinydb.operations import set
 import uuid
@@ -174,12 +171,27 @@ def trade():
     if 'username' not in session:
         return redirect(url_for('login'))
 
-    ads = ads_db.all()
-    return render_template('trade.html', ads=ads)
+    oglas = ads_db.all()
+    return render_template('trade.html', ads=oglas)
 
 @app.route('/uploads/ads/<filename>')
 def uploaded_ad_image(filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], 'ads'), filename)
+
+@app.route('/mojioglasi', methods=['GET', 'POST'])
+def moji_oglasi():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+
+    if request.method == 'POST':
+        remove_id = request.form.get('remove_id')
+        if remove_id:
+            ads_db.remove(Query().id == remove_id)
+
+    oglasi = ads_db.search(Query().username == username)
+    return render_template('mojioglasi.html', ads=oglasi)
 
 if __name__ == "__main__":
     if not os.path.exists('templates'):
