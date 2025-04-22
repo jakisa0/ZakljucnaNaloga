@@ -2,7 +2,7 @@
 Ljudje pogosto kupujejo oblačila, ki jih kasneje ne nosijo, ker ne vedo, kako jih kombinirati ali niso prepričani v svojo garderobo.
 
 ## Rešitev
-**CustomCloset** omogoča uporabnikom, da digitalno sestavijo svojo garderobo, preizkušajo različne kombinacije in ustvarijo svoje osebne modne izglede. Aplikacija nudi tudi nasvete za nakupovanje, da se izognejo nepotrebnim nakupom.
+**CustomCloset** omogoča uporabnikom, da digitalno sestavijo svojo garderobo, preizkušajo različne kombinacije, ustvarijo svoje osebne modne izglede in objavlajo "oglase" za zamenjavo oblačil z drugimi uporabniki. Aplikacija nudi tudi nasvete za nakupovanje, da se izognejo nepotrebnim nakupom.
 
 ## Ciljna skupina
 Ljudje, ki želijo optimizirati svojo garderobo, najti nove kombinacije in se izogniti nepotrebnim nakupom.
