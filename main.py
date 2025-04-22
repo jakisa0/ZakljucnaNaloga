@@ -3,7 +3,7 @@
 #pip install tinydb flask
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_from_directory
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename 
 from tinydb import TinyDB, Query
 import os
 
